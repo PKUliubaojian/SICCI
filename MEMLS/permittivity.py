@@ -464,7 +464,7 @@ def salinewater(T,sal,freq):
     a17 = 0.92609781e-2
     a18 = -0.26093754e-1
         
-    ns = 1 # Error in equation, p. 126?
+    ns = 1e-9 # Error in equation, p. 126?
     epsw0 = 87.85306 * np.exp(-0.00456992*Tc-a1*sal-a2*sal**2-a3*sal*Tc)
     epsw1 = a4 * np.exp(-a5*Tc-a6*sal-a7*sal*Tc)
     tau_w1 = (a8+a9*sal) * np.exp(a10/(Tc+a11)) * ns
@@ -482,10 +482,10 @@ def salinewater(T,sal,freq):
     
     # Double Debye-model:
     epsi = epswoo + (epsw0-epsw1)/(1+(2*np.pi*freq*tau_w1)**2) + \
-        (epsw0-epswoo)/(1+(2*np.pi*freq*tau_w2)**2)
+        (epsw1-epswoo)/(1+(2*np.pi*freq*tau_w2)**2)
         
     epsii = 2*np.pi*freq*tau_w1*(epsw0-epsw1)/(1+(2*np.pi*freq*tau_w1)**2) + \
-        2*np.pi*freq*tau_w2*(epsw0-epswoo)/(1+(2*np.pi*freq*tau_w2)**2) + \
+        2*np.pi*freq*tau_w2*(epsw1-epswoo)/(1+(2*np.pi*freq*tau_w2)**2) + \
         sigma/(2*np.pi*e0*freq)
         
     return epsi, epsii
